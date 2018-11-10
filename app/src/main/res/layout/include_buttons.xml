@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:src="@drawable/bg_frame" />
+
+    <ImageView
+        android:id="@+id/iv_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/iv_center"
+        android:layout_marginBottom="10dp"
+        android:alpha="0.5"
+        android:visibility="invisible"
+        android:src="@drawable/ic_sad" />
+
+    <ImageView
+        android:id="@+id/iv_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/iv_bottom"
+        android:layout_marginBottom="10dp"
+        android:alpha="0.5"
+        android:visibility="invisible"
+        android:src="@drawable/ic_clam" />
+
+    <ImageView
+        android:id="@+id/iv_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/iv_current"
+        android:layout_marginBottom="20dp"
+        android:alpha="0.5"
+        android:visibility="invisible"
+        android:src="@drawable/ic_unhappy" />
+
+    <ImageView
+        android:id="@+id/iv_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/iv_bg"
+        android:src="@drawable/ic_smile" />
+
+</RelativeLayout>
