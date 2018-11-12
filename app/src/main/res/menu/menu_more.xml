@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/recommend"
+        android:title="@string/daily_recommend" />
+    <item
+        android:id="@+id/comments"
+        android:title="@string/comments_plaza" />
+    <item
+        android:id="@+id/collection"
+        android:title="@string/my_collection" />
+    <item
+        android:id="@+id/setting"
+        android:title="@string/setting" />
+</menu>

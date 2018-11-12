@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
@@ -135,7 +136,7 @@ class DiskImageView : AppCompatImageView {
         backgroundView = background
     }
 
-    fun stateChanged() {
+    fun stateChanged(@DrawableRes drawableRes: Int) {
         var isUpdate = false
         ObjectAnimator.ofFloat(this, "alpha", 1f, 0f, 1f)
                 .apply {
@@ -146,7 +147,7 @@ class DiskImageView : AppCompatImageView {
                     addUpdateListener { it ->
                         if ((it.animatedValue as Float) < 0.2 && !isUpdate){
 //                          装填drawable
-                            ContextCompat.getDrawable(context,R.drawable.ic_default_bottom_music_icon)
+                            ContextCompat.getDrawable(context,drawableRes)
                                     ?.let { setUpPicture(it) }
                             isUpdate = true
                         }
@@ -172,26 +173,6 @@ class DiskImageView : AppCompatImageView {
                 backgroundView.stateChanged()
             }
         }
-    }
-
-    fun disappear(){
-        ObjectAnimator.ofFloat(this,"alpha",1f,0f)
-                .apply {
-                    duration = 1500
-                    start()
-                }
-        backgroundView.disappear()
-        this.visibility = View.GONE
-    }
-
-    fun show(){
-        this.visibility = View.VISIBLE
-        ObjectAnimator.ofFloat(this,"alpha",0f,1f)
-                .apply {
-                    duration = 1500
-                    start()
-                }
-        backgroundView.show()
     }
 }
 

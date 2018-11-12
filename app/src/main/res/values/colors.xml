@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorPrimaryDark">#999</color>
     <color name="colorAccent">#597AAF</color>
     <color name="transparent">#00ffffff</color>
+    <color name="currentLyricColor">#012E75</color>
+    <color name="normalLyricColor">#5476AC</color>
 </resources>

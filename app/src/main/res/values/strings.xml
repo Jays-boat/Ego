@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Ego</string>
+    <string name="daily_recommend">日推 Daily Recommend</string>
+    <string name="comments_plaza">广场 Comments Plaza</string>
+    <string name="my_collection">我的收藏 My Collection</string>
+    <string name="setting">设置 Setting</string>
 </resources>
