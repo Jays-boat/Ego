@@ -1,3 +1,4 @@
+package com.jayboat.ego.service
 
 import android.app.Service
 import android.content.Intent
@@ -73,8 +74,10 @@ class MusicPlayerService : Service() {
             mMediaPlayer.stop()
         }
 
-        fun seekTo(pos: Long) {
-            TODO("seekTo")
+        fun seekTo(pos: Float) {
+            mMediaPlayer.pause()
+            mMediaPlayer.seekTo((pos * getDuration()).toInt())
+            mMediaPlayer.start()
         }
 
         fun setMusicList(musicList: SongList) {
