@@ -2,7 +2,7 @@ package com.jayboat.ego.config;
 
 
 import com.jayboat.ego.bean.AlbumList;
-import com.jayboat.ego.bean.Music;
+import com.jayboat.ego.bean.Lyric;
 import com.jayboat.ego.bean.SongList;
 import com.jayboat.ego.bean.User;
 
@@ -27,7 +27,7 @@ public class NetConfig {
         @GET("playlist/detail")
         Call<SongList> getSongList(@Query("id") String albumListId);
 
-        @GET("music/url")
-        Call<Music> getMusicUrl(@Query("id") String musicId);
+        @GET("/lyric")
+        Call<Lyric> getLyric(@Query("id") String musicId);
     }
 }

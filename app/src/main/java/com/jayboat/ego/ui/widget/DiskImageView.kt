@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
@@ -126,7 +125,7 @@ class DiskImageView : AppCompatImageView {
         canvas.drawBitmap(disk, left.toFloat(), top.toFloat(), null)
     }
 
-    fun setUpPicture(drawable: Drawable) {
+    private fun setUpPicture(drawable: Drawable) {
         upPicture = drawable
         disk = initDisc()
         postInvalidate()
@@ -136,7 +135,7 @@ class DiskImageView : AppCompatImageView {
         backgroundView = background
     }
 
-    fun stateChanged(@DrawableRes drawableRes: Int) {
+    fun stateChanged(drawableRes:Drawable) {
         var isUpdate = false
         ObjectAnimator.ofFloat(this, "alpha", 1f, 0f, 1f)
                 .apply {
@@ -145,10 +144,8 @@ class DiskImageView : AppCompatImageView {
                     repeatCount = 0
                     start()
                     addUpdateListener { it ->
-                        if ((it.animatedValue as Float) < 0.2 && !isUpdate){
-//                          装填drawable
-                            ContextCompat.getDrawable(context,drawableRes)
-                                    ?.let { setUpPicture(it) }
+                        if ((it.animatedValue as Float) < 0.2 && !isUpdate) {
+                            setUpPicture(drawableRes)
                             isUpdate = true
                         }
                     }
@@ -174,6 +171,12 @@ class DiskImageView : AppCompatImageView {
             }
         }
     }
+
+    fun stopDisk() {
+        animator.end()
+        currentState = STATE_STOP
+    }
+
 }
 
 val picSize: Float

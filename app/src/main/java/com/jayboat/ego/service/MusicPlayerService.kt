@@ -118,6 +118,8 @@ class MusicPlayerService : Service() {
 
         fun getMusicList() = mMusicList
 
+        fun getCurrentPostion() = playingMusicIndicator
+
         fun getDuration() = mMediaPlayer.duration
 
         fun getStatus() = mMediaPlayer.getFlag()

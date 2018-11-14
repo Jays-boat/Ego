@@ -1,7 +1,7 @@
 package com.jayboat.ego.utils;
 
 
-import com.jayboat.ego.bean.AlbumList;
+import com.jayboat.ego.bean.Lyric;
 import com.jayboat.ego.bean.SongList;
 import com.jayboat.ego.bean.User;
 import com.jayboat.ego.config.NetConfig;
@@ -24,13 +24,13 @@ public class NetUtils {
         call.enqueue(loginPhoneCallback);
     }
 
-    public static void getAlbumList(long id, Callback<AlbumList> getAlbumListCallBack){
+    public static void getLyric(long id, Callback<Lyric> getLyricCallBack) {
         NetConfig.GetMusicData getMusicData = getRetrofitBuilder().build().create(NetConfig.GetMusicData.class);
-        Call<AlbumList> call = getMusicData.getAlbumList(String.valueOf(id));
-        call.enqueue(getAlbumListCallBack);
+        Call<Lyric> call = getMusicData.getLyric(String.valueOf(id));
+        call.enqueue(getLyricCallBack);
     }
 
-    public static void getMusicList(long id, Callback<SongList> songCallback){
+    public static void getMusicList(long id, Callback<SongList> songCallback) {
         NetConfig.GetMusicData getMusicData = getRetrofitBuilder().build().create(NetConfig.GetMusicData.class);
         Call<SongList> call = getMusicData.getSongList(String.valueOf(id));
         call.enqueue(songCallback);

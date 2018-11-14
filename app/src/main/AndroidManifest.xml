@@ -23,14 +23,14 @@
         </activity>
 
         <service
-            android:name="com.jayboat.ego.service.MusicPlayerService"
+            android:name=".service.MusicPlayerService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
             android:name=".ui.activity.MusicDetailActivity"
-            android:label="@string/title_activity_music_detail"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activity.RecommendActivity"/>
     </application>
 
 </manifest>
