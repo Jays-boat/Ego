@@ -68,27 +68,19 @@ public class SongList implements Serializable {
          * commentCount : 0
          */
 
-        private boolean subscribed;
         private CreatorBean creator;
         private Object artists;
-        private boolean ordered;
-        private int status;
         private int trackCount;
         private int playCount;
         private String coverImgUrl;
         private int specialType;
-        private boolean anonimous;
         private int userId;
         private long trackUpdateTime;
         private long coverImgId;
         private long createTime;
         private long updateTime;
-        private int privacy;
-        private boolean newImported;
-        private boolean highQuality;
         private int totalDuration;
         private String commentThreadId;
-        private int adType;
         private long trackNumberUpdateTime;
         private Object description;
         private int cloudTrackCount;
@@ -98,17 +90,8 @@ public class SongList implements Serializable {
         private int shareCount;
         private String coverImgId_str;
         private int commentCount;
-        private List<?> subscribers;
         private List<TracksBean> tracks;
         private List<String> tags;
-
-        public boolean isSubscribed() {
-            return subscribed;
-        }
-
-        public void setSubscribed(boolean subscribed) {
-            this.subscribed = subscribed;
-        }
 
         public CreatorBean getCreator() {
             return creator;
@@ -124,22 +107,6 @@ public class SongList implements Serializable {
 
         public void setArtists(Object artists) {
             this.artists = artists;
-        }
-
-        public boolean isOrdered() {
-            return ordered;
-        }
-
-        public void setOrdered(boolean ordered) {
-            this.ordered = ordered;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
         }
 
         public int getTrackCount() {
@@ -172,14 +139,6 @@ public class SongList implements Serializable {
 
         public void setSpecialType(int specialType) {
             this.specialType = specialType;
-        }
-
-        public boolean isAnonimous() {
-            return anonimous;
-        }
-
-        public void setAnonimous(boolean anonimous) {
-            this.anonimous = anonimous;
         }
 
         public int getUserId() {
@@ -222,30 +181,6 @@ public class SongList implements Serializable {
             this.updateTime = updateTime;
         }
 
-        public int getPrivacy() {
-            return privacy;
-        }
-
-        public void setPrivacy(int privacy) {
-            this.privacy = privacy;
-        }
-
-        public boolean isNewImported() {
-            return newImported;
-        }
-
-        public void setNewImported(boolean newImported) {
-            this.newImported = newImported;
-        }
-
-        public boolean isHighQuality() {
-            return highQuality;
-        }
-
-        public void setHighQuality(boolean highQuality) {
-            this.highQuality = highQuality;
-        }
-
         public int getTotalDuration() {
             return totalDuration;
         }
@@ -260,14 +195,6 @@ public class SongList implements Serializable {
 
         public void setCommentThreadId(String commentThreadId) {
             this.commentThreadId = commentThreadId;
-        }
-
-        public int getAdType() {
-            return adType;
-        }
-
-        public void setAdType(int adType) {
-            this.adType = adType;
         }
 
         public long getTrackNumberUpdateTime() {
@@ -340,14 +267,6 @@ public class SongList implements Serializable {
 
         public void setCommentCount(int commentCount) {
             this.commentCount = commentCount;
-        }
-
-        public List<?> getSubscribers() {
-            return subscribers;
-        }
-
-        public void setSubscribers(List<?> subscribers) {
-            this.subscribers = subscribers;
         }
 
         public List<TracksBean> getTracks() {
@@ -695,8 +614,6 @@ public class SongList implements Serializable {
             private String name;
             private long id;
             private int position;
-            private int status;
-            private int fee;
             private int copyrightId;
             private String disc;
             private int no;
@@ -727,7 +644,6 @@ public class SongList implements Serializable {
             private int mvid;
             private List<String> alias;
             private List<ArtistsBeanX> artists;
-            private List<?> rtUrls;
 
             public String getName() {
                 return name;
@@ -751,22 +667,6 @@ public class SongList implements Serializable {
 
             public void setPosition(int position) {
                 this.position = position;
-            }
-
-            public int getStatus() {
-                return status;
-            }
-
-            public void setStatus(int status) {
-                this.status = status;
-            }
-
-            public int getFee() {
-                return fee;
-            }
-
-            public void setFee(int fee) {
-                this.fee = fee;
             }
 
             public int getCopyrightId() {
@@ -1009,15 +909,8 @@ public class SongList implements Serializable {
                 this.artists = artists;
             }
 
-            public List<?> getRtUrls() {
-                return rtUrls;
-            }
-
-            public void setRtUrls(List<?> rtUrls) {
-                this.rtUrls = rtUrls;
-            }
-
             public static class AlbumBean implements Serializable {
+
                 /**
                  * name : 新地球
                  * id : 3056951
@@ -1062,8 +955,6 @@ public class SongList implements Serializable {
                 private int copyrightId;
                 private String commentThreadId;
                 private String subType;
-                private List<?> songs;
-                private List<?> alias;
                 private List<ArtistsBean> artists;
 
                 public String getName() {
@@ -1216,22 +1107,6 @@ public class SongList implements Serializable {
 
                 public void setSubType(String subType) {
                     this.subType = subType;
-                }
-
-                public List<?> getSongs() {
-                    return songs;
-                }
-
-                public void setSongs(List<?> songs) {
-                    this.songs = songs;
-                }
-
-                public List<?> getAlias() {
-                    return alias;
-                }
-
-                public void setAlias(List<?> alias) {
-                    this.alias = alias;
                 }
 
                 public List<ArtistsBean> getArtists() {
@@ -1764,6 +1639,7 @@ public class SongList implements Serializable {
             }
 
             public static class BMusicBean implements Serializable {
+
                 /**
                  * name : null
                  * id : 1186554094
@@ -1884,8 +1760,6 @@ public class SongList implements Serializable {
                 private int albumSize;
                 private String trans;
                 private int musicSize;
-                private List<?> alias;
-
                 public String getName() {
                     return name;
                 }
@@ -1964,14 +1838,6 @@ public class SongList implements Serializable {
 
                 public void setMusicSize(int musicSize) {
                     this.musicSize = musicSize;
-                }
-
-                public List<?> getAlias() {
-                    return alias;
-                }
-
-                public void setAlias(List<?> alias) {
-                    this.alias = alias;
                 }
             }
         }

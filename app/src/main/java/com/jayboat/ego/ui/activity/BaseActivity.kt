@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Bundle
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
 import com.jayboat.ego.service.MusicPlayerService
+import com.r0adkll.slidr.Slidr
 
 /**
  * Created by Hosigus on 2018/7/28.
@@ -26,6 +28,11 @@ abstract class BaseActivity : AppCompatActivity(), MusicPlayerService.MusicPlaye
             musicControlBinder?.addListener(this@BaseActivity)
             onServiceConnected()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Slidr.attach(this)
     }
 
     override fun onStart() {

@@ -6,4 +6,9 @@
     <color name="transparent">#00ffffff</color>
     <color name="currentLyricColor">#012E75</color>
     <color name="normalLyricColor">#5476AC</color>
+
+    <color name="toolbarTitleColor">#000000</color>
+    <color name="toolbarSubTitleColor">#99000000</color>
+
+    <color name="playTimeTextColor">#7a000000</color>
 </resources>

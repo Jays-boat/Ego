@@ -3,12 +3,14 @@ package com.jayboat.ego;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.jayboat.ego.bean.User;
 import com.jayboat.ego.utils.NetUtils;
+import com.jayboat.ego.utils.SQLHelper;
 import com.jayboat.ego.utils.ToastUtils;
 
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +32,7 @@ import retrofit2.Response;
 public class App extends Application {
 
     private static Context appContext;
+    private static SQLiteDatabase database;
 
     private static HttpProxyCacheServer proxy;
 
@@ -46,6 +49,8 @@ public class App extends Application {
         appContext = getApplicationContext();
 
         preferences = getSharedPreferences("login", MODE_PRIVATE);
+
+        database = new SQLHelper().getWritableDatabase();
 
         readData();
 
@@ -160,4 +165,7 @@ public class App extends Application {
         return proxy == null ? (proxy = new HttpProxyCacheServer(appContext)) : proxy;
     }
 
+    public static SQLiteDatabase getDatabase() {
+        return database;
+    }
 }

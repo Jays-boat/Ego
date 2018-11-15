@@ -19,6 +19,7 @@ import com.jayboat.ego.bean.Lyric
 import com.jayboat.ego.bean.SongList
 import com.jayboat.ego.utils.NetUtils
 import com.jayboat.ego.utils.ToastUtils
+import com.jayboat.ego.utils.startMusicDetailActivity
 import excitingId
 import happyId
 import invisible
@@ -117,7 +118,8 @@ class MainActivity : BaseActivity() {
         discView.dim_playing.playDisk()
 
         ibtn_more.setOnClickListener {
-            // todo:页面跳转，内容详情页面
+            currentList ?: return@setOnClickListener
+            startMusicDetailActivity(this@MainActivity, currentList!!.result, currentPosition)
         }
 
         iv_current.setOnClickListener { changeMood() }

@@ -1,25 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.MusicDetailActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"/>
-            <!--app:popupTheme="@style/AppTheme.PopupOverlay" -->
+        <TextView
+            android:id="@+id/tv_music_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/toolbarTitleColor"
+            android:textSize="18sp"
+            tools:text="Thunder" />
+    </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/tv_singer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/toolbarSubTitleColor"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:text="Imagine Dragons" />
 
-    </android.support.design.widget.AppBarLayout>
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.065" />
 
-    <include layout="@layout/content_music_detail" />
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.935" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.47" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_op"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/gl_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9265" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/riv_music_img"
+        android:layout_width="0dp"
+        android:layout_height="210dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/gl_img"
+        app:layout_constraintEnd_toEndOf="@+id/gl_right"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_singer_name"
+        app:layout_constraintVertical_bias="1.0"
+        app:riv_border_width="1dp"
+        app:riv_corner_radius="3dp"
+        app:riv_tile_mode="clamp" />
+
+    <me.wcy.lrcview.LrcView
+        android:id="@+id/lrc_detail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/gl_op"
+        app:layout_constraintEnd_toEndOf="@+id/gl_right"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/riv_music_img"
+        app:layout_constraintVertical_bias="0.526"
+        app:lrcCurrentTextColor="@color/currentLyricColor"
+        app:lrcLabel="歌词加载中..."
+        app:lrcNormalTextColor="@color/normalLyricColor"
+        app:lrcTextSize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:src="@drawable/ic_download"
+        app:layout_constraintEnd_toStartOf="@id/iv_star"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toTopOf="@+id/gl_op"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/iv_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_off"
+        app:layout_constraintEnd_toStartOf="@+id/iv_like"
+        app:layout_constraintStart_toEndOf="@+id/iv_download"
+        app:layout_constraintTop_toTopOf="@+id/iv_download"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/iv_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_like_off"
+        app:layout_constraintEnd_toStartOf="@+id/iv_commend"
+        app:layout_constraintStart_toEndOf="@id/iv_star"
+        app:layout_constraintTop_toTopOf="@+id/iv_download"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/iv_commend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="21dp"
+        android:src="@drawable/ic_commend"
+        app:layout_constraintEnd_toEndOf="@+id/gl_right"
+        app:layout_constraintStart_toEndOf="@id/iv_like"
+        app:layout_constraintTop_toTopOf="@+id/iv_download"
+        tools:ignore="ContentDescription" />
+
+    <SeekBar
+        android:id="@+id/bar_music"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/iv_play"
+        app:layout_constraintEnd_toStartOf="@+id/gl_right"
+        app:layout_constraintStart_toStartOf="@+id/gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/iv_download" />
+
+    <TextView
+        android:id="@+id/tv_cur_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/playTimeTextColor"
+        app:layout_constraintBottom_toTopOf="@+id/iv_play"
+        app:layout_constraintTop_toBottomOf="@+id/bar_music"
+        app:layout_constraintStart_toStartOf="@id/gl_left"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintEnd_toStartOf="@id/tv_max_time"
+        tools:text="1:23" />
+
+    <TextView
+        android:id="@+id/tv_max_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/playTimeTextColor"
+        app:layout_constraintBottom_toTopOf="@+id/iv_play"
+        app:layout_constraintEnd_toEndOf="@id/gl_right"
+        app:layout_constraintTop_toBottomOf="@+id/bar_music"
+        app:layout_constraintStart_toEndOf="@id/tv_cur_time"
+        tools:text="4:42" />
+
+    <ImageView
+        android:id="@+id/iv_move_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:src="@drawable/ic_move_back"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_play"
+        app:layout_constraintEnd_toStartOf="@+id/iv_play"
+        app:layout_constraintTop_toTopOf="@+id/iv_play"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/iv_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toTopOf="@+id/gl_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/iv_move_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:src="@drawable/ic_move_forward"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_play"
+        app:layout_constraintStart_toEndOf="@+id/iv_play"
+        app:layout_constraintTop_toTopOf="@+id/iv_play"
+        tools:ignore="ContentDescription" />
+
+</android.support.constraint.ConstraintLayout>

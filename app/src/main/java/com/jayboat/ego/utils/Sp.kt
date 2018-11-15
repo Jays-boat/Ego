@@ -3,7 +3,11 @@ package com.jayboat.ego.utils
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.jayboat.ego.App
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 val gson = Gson()
 
@@ -26,3 +30,27 @@ fun <T> getBeanFromSP(keyName: String, clazz: Class<T>, spName: String = "EgoDef
 
 fun <T> putBeanToSP(keyName: String, bean: T, spName: String = "EgoDefault") =
         sp(spName)() { putString(keyName, gson.toJson(bean)) }
+
+fun <T> withSPCache(keyName: String, clazz: Class<T>, observable: () -> Observable<T>,
+                    onGetBean: (T) -> Unit, fail: (Throwable) -> Unit = { it.printStackTrace() },
+                    spName: String = "EgoDefault") =
+        Observable.create<String> { it.onNext(sp(spName).getString(keyName, "") ?: "") }
+                .doOnNext { json ->
+                    observable()
+                            .filter { gson.toJson(it) != json }
+                            .doOnNext { putBeanToSP(keyName, it, spName) }
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(onGetBean, fail)
+                }.map {
+                    if (it.isNotBlank()) {
+                        gson.fromJson(it, clazz)
+                    } else {
+                        null
+                    }
+                }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn { null }
+                .subscribe({ it?.let(onGetBean) }, {
+                    (it as? JsonSyntaxException) ?: (it as? NullPointerException) ?: fail(it)
+                })
