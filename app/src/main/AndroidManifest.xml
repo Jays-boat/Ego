@@ -14,13 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ui.activity.MainActivity" />
 
         <service
             android:name=".service.MusicPlayerService"
@@ -30,7 +24,15 @@
         <activity
             android:name=".ui.activity.MusicDetailActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.RecommendActivity"/>
+        <activity android:name=".ui.activity.RecommendActivity" />
+        <activity android:name=".ui.activity.WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.MusicRankActivity"></activity>
     </application>
 
 </manifest>

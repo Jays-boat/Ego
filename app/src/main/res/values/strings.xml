@@ -6,4 +6,6 @@
     <string name="setting">设置 Setting</string>
     <string name="title_activity_music_detail">MusicDetailActivity</string>
     <string name="menu_share">分享</string>
+    <string name="welcome_to_ego">Welcome to Ego!\nHope you will have fun there.</string>
+    <string name="top_10">热门单曲TOP 10</string>
 </resources>

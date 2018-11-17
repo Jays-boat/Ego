@@ -1,30 +1,27 @@
 package com.jayboat.ego.ui.activity
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import clamId
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.jayboat.ego.R
 import com.jayboat.ego.bean.Lyric
 import com.jayboat.ego.bean.SongList
-import com.jayboat.ego.utils.NetUtils
-import com.jayboat.ego.utils.ToastUtils
-import com.jayboat.ego.utils.startMusicDetailActivity
-import excitingId
-import happyId
+import com.jayboat.ego.ui.widget.STATE_PLAYING
+import com.jayboat.ego.utils.*
 import invisible
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_buttons.*
+import kotlinx.android.synthetic.main.include_disc.*
 import kotlinx.android.synthetic.main.include_disc.view.*
 import kotlinx.android.synthetic.main.include_lyrics.view.*
 import kotlinx.android.synthetic.main.include_toolbar.*
@@ -32,7 +29,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import screenWidth
-import unhappyId
 import visible
 
 class MainActivity : BaseActivity() {
@@ -57,36 +53,9 @@ class MainActivity : BaseActivity() {
     private val discView by lazy { View.inflate(this, R.layout.include_disc, null) }
     private val lyricView by lazy { View.inflate(this, R.layout.include_lyrics, null) }
 
-//    这里拉取还有点问题（深夜写代码容易zz，明天看一下咋个改
-    private val happyMusicList = getList(happyId)
-    private val excitingMusicList = getList(excitingId)
-    private val unhappyMusicList = getList(unhappyId)
-    private val clamMusicList= getList(clamId)
-
     private val TAG = "MainActivity"
 
-    private fun getList(id: Long): SongList? {
-        var list : SongList? = null
-        NetUtils.getMusicList(id, object : Callback<SongList> {
-            override fun onResponse(call: Call<SongList>, response: Response<SongList>) {
-                if (response.body() != null) {
-                    list = response.body()!!
-                    currentList = response.body()!!
-                    initPosition()
-                } else {
-                    ToastUtils.show("内容获取有误，请重试:(")
-                    Log.v(TAG, response.errorBody()!!.toString() + "")
-                }
-            }
-
-            override fun onFailure(call: Call<SongList>, t: Throwable) {
-                ToastUtils.show("获取过程可能有点问题:(")
-                Log.v(TAG, t.toString())
-            }
-        })
-        return list
-    }
-
+//  *注：假如说要从其他的页面跳转到本页播放需要更换currentList&&currentPosition*
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +66,11 @@ class MainActivity : BaseActivity() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         initMusicList()
+        initPosition()
     }
 
-//    改一下。。最开始显示歌词页面+正在加载中。。
     private fun initView() {
-        (include as Toolbar).apply {
+        tb_common.apply {
             setNavigationIcon(R.drawable.ic_setting)
             setNavigationOnClickListener {
                 if (!dl_main.isDrawerOpen(nv_setting)) {
@@ -123,6 +92,21 @@ class MainActivity : BaseActivity() {
         }
 
         iv_current.setOnClickListener { changeMood() }
+
+//      todo：前往不同的页面
+        nv_setting.setNavigationItemSelectedListener {
+            when (it.title) {
+                resources.getString(R.string.daily_recommend) -> {
+                    startActivity(Intent(this@MainActivity, RecommendActivity::class.java))
+                }
+                resources.getString(R.string.setting) -> {
+                }
+                resources.getString(R.string.comments_plaza) -> {
+                }
+                resources.getString(R.string.my_collection) -> Unit
+            }
+            true
+        }
     }
 
     private fun initMusicList() {
@@ -134,15 +118,17 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun initPosition(){
+    private fun initPosition() {
         currentPosition = (Math.random() * currentList!!.result.trackCount).toInt()
         musicControlBinder?.setMusicList(currentList!!)
-        musicControlBinder?.playMusic(currentPosition)
         val currentMusic = currentList!!.result.tracks[currentPosition]
         initMusicData(currentMusic)
     }
 
+    //  emmm..还没想好这个怎么本地怎么操作，drawable的sp好麻烦啊（
     private fun initMusicData(currentMusic: SongList.ResultBean.TracksBean) {
+        lyricView.lrc_main.setLabel("加载歌词中...")
+//        val music = getBeanFromSP(currentMusic.name,SimpleMusic::class.java,moods[0])
         Glide.with(this@MainActivity)
                 .load(currentMusic.album.picUrl)
                 .into(object : SimpleTarget<Drawable>() {
@@ -150,6 +136,7 @@ class MainActivity : BaseActivity() {
                         discView.dim_playing.stateChanged(resource)
                     }
                 })
+        musicControlBinder?.playMusic(currentPosition)
         discView.tv_name_song.text = currentMusic.name
         var info = StringBuilder()
         repeat(currentMusic.artists.size) {
@@ -158,6 +145,7 @@ class MainActivity : BaseActivity() {
         }
         info = StringBuilder(info.substring(0, info.length - 1))
         discView.tv_name_singer.text = info.toString()
+
         NetUtils.getLyric(currentMusic.id, object : Callback<Lyric> {
             override fun onFailure(call: Call<Lyric>, t: Throwable) {
                 ToastUtils.show("暂未获取数据:>")
@@ -166,14 +154,15 @@ class MainActivity : BaseActivity() {
 
             override fun onResponse(call: Call<Lyric>, response: Response<Lyric>) {
                 if (response.body() != null) {
-                    if (response.body()!!.lrc != null){
+                    if (response.body()!!.lrc != null) {
+                        Log.i(TAG, response.body()!!.lrc.lyric)
                         lyricView.lrc_main.loadLrc(response.body()!!.lrc.lyric)
                     } else {
-                        ToastUtils.show("暂时没有歌词呢:<")
+                        lyricView.lrc_main.loadLrc("暂无歌词:<")
                     }
                 } else {
                     ToastUtils.show("暂未获取数据:>")
-                    lyricView.lrc_main.setLabel("暂时没有歌词呢:(")
+                    lyricView.lrc_main.loadLrc("暂时没有歌词呢:(")
                 }
             }
 
@@ -218,7 +207,9 @@ class MainActivity : BaseActivity() {
             "clam" -> clamMusicList
             else -> excitingMusicList
         }
+        changeMood()
         initMusicList()
+        initPosition()
     }
 
     private fun changeView() {
@@ -281,10 +272,12 @@ class MainActivity : BaseActivity() {
     //      前往下一首歌
     private fun toNextMusic() {
         currentPosition += 1
+        if (currentPosition == currentList!!.result.trackCount) {
+            currentPosition = 0
+        }
         if (currentList != null) {
             val currentMusic = currentList!!.result.tracks[currentPosition]
             initMusicData(currentMusic)
-            musicControlBinder?.playMusic(currentPosition)
         } else {
             initMusicList()
         }
@@ -293,10 +286,12 @@ class MainActivity : BaseActivity() {
     //      前往前一首歌
     private fun toPreviousMusic() {
         currentPosition -= 1
+        if (currentPosition == -1) {
+            currentPosition = currentList!!.result.trackCount - 1
+        }
         if (currentList != null) {
             val currentMusic = currentList!!.result.tracks[currentPosition]
             initMusicData(currentMusic)
-            musicControlBinder?.playMusic(currentPosition)
         } else {
             initMusicList()
         }
@@ -304,12 +299,20 @@ class MainActivity : BaseActivity() {
 
     override fun onMusicStart() = Unit
 
-    override fun onMusicPause() = Unit
+    override fun onMusicPause() {
+        dim_playing.currentState = STATE_PLAYING
+        discView.dim_playing.playDisk()
+    }
 
-    override fun onMusicStop() = Unit
+    override fun onMusicStop() {
+        discView.dim_playing.stopDisk()
+    }
 
     override fun onProgressUpdate(progress: Float) {
         lyricView.lrc_main.updateTime((musicControlBinder?.getDuration()!! * progress).toLong())
+        if (progress > 0.995) {
+            toNextMusic()
+        }
     }
 
     override fun onMusicSelect(pos: Int) = Unit
