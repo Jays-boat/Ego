@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="45dp"
+    android:layout_marginEnd="45dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="8dp"
+    app:cardMaxElevation="12dp"
+    app:strokeColor="#5577AC"
+    app:strokeWidth="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_card_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            tools:text="三分钟前，十二兀鹫对此首歌发表了评论" />
+
+        <Button
+            android:id="@+id/btn_card_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_card_text"
+            android:layout_marginStart="40dp"
+            android:background="@color/transparent"
+            android:text="@string/sure"
+            android:textColor="#5476AC" />
+
+        <Button
+            android:id="@+id/btn_card_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_card_text"
+            android:layout_alignEnd="@id/tv_card_text"
+            android:layout_marginEnd="40dp"
+            android:background="@color/transparent"
+            android:text="@string/cancel"
+            android:textColor="#5476AC" />
+
+    </RelativeLayout>
+
+
+</android.support.design.card.MaterialCardView>

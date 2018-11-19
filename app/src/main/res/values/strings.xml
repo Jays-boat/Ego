@@ -9,7 +9,8 @@
     <string name="welcome_to_ego">Welcome to Ego!\nHope you will have fun there.</string>
     <string name="top_10">热门单曲TOP 10</string>
     <string name="confirm">完成</string>
-    <string name="cancel">取消</string>
     <string name="skip">跳过</string>
     <string name="hint1">这是今日份的开心，写点什么吧</string>
+    <string name="sure">是的</string>
+    <string name="cancel">算了</string>
 </resources>
