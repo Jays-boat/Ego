@@ -1,15 +1,17 @@
 package com.jayboat.ego.utils
 
 import android.media.MediaPlayer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Hosigus on 2018/7/27.
  */
 class MyMediaPlayer : MediaPlayer() {
     companion object {
-        private const val STATUS_PLAYING = 0
-        private const val STATUS_PAUSE = 1
-        private const val STATUS_STOP = 2
+        const val STATUS_PLAYING = 0
+        const val STATUS_PAUSE = 1
+        const val STATUS_STOP = 2
     }
 
     private var playStatusFlag = STATUS_STOP
@@ -17,13 +19,13 @@ class MyMediaPlayer : MediaPlayer() {
     var onStartListener: (() -> Unit)? = null
     var onPauseListener: (() -> Unit)? = null
     var onStopListener: (() -> Unit)? = null
-    var onProgressUpdateListener: ((progress: Float) -> Unit)? = null
+    var onProgressUpdateListener: ((progress: Int) -> Unit)? = null
 
     private val updateProgressRunnable = object :Runnable{
         override fun run() {
             if (isPlaying && onProgressUpdateListener != null) {
-                onProgressUpdateListener!!.invoke(currentPosition.toFloat() / duration)
-                ThreadUtils.getInstance().postDelay(this, 500L)
+                onProgressUpdateListener!!.invoke(currentPosition)
+                AndroidSchedulers.mainThread().scheduleDirect(this, 500, TimeUnit.MILLISECONDS)
             }
         }
     }
@@ -33,7 +35,7 @@ class MyMediaPlayer : MediaPlayer() {
         playStatusFlag = STATUS_PLAYING
         onStartListener?.invoke()
         if (onProgressUpdateListener != null) {
-            ThreadUtils.getInstance().post(updateProgressRunnable)
+            AndroidSchedulers.mainThread().scheduleDirect(updateProgressRunnable)
         }
     }
 

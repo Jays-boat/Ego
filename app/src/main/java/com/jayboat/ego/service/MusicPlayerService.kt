@@ -74,9 +74,9 @@ class MusicPlayerService : Service() {
             mMediaPlayer.stop()
         }
 
-        fun seekTo(pos: Float) {
+        fun seekTo(pos: Int) {
             mMediaPlayer.pause()
-            mMediaPlayer.seekTo((pos * getDuration()).toInt())
+            mMediaPlayer.seekTo(pos)
             mMediaPlayer.start()
         }
 
@@ -126,11 +126,11 @@ class MusicPlayerService : Service() {
     }
 
     interface MusicPlayerListener {
-        fun onMusicStart()
-        fun onMusicPause()
-        fun onMusicStop()
-        fun onProgressUpdate(progress: Float)
-        fun onMusicSelect(pos: Int)
-        fun onMusicListChange()
+        fun onMusicStart() = Unit
+        fun onMusicPause() = Unit
+        fun onMusicStop() = Unit
+        fun onProgressUpdate(progress: Int) = Unit
+        fun onMusicSelect(pos: Int) = Unit
+        fun onMusicListChange() = Unit
     }
 }

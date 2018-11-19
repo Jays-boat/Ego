@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="53dp"
+    android:layout_marginTop="13dp"
+    android:background="@drawable/bg_round_rect_blue">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/riv_music_img"
+        android:layout_width="58dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="3dp"
+        tools:src="#000" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_list_play"
+        app:layout_constraintTop_toTopOf="@id/riv_music_img"
+        app:layout_constraintStart_toStartOf="@id/riv_music_img"
+        app:layout_constraintEnd_toEndOf="@id/riv_music_img"
+        app:layout_constraintBottom_toBottomOf="@id/riv_music_img"
+        tools:ignore= "contentDescription" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_music_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="#e6000000"
+        app:autoSizeMaxTextSize="14sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@id/tv_singer_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/riv_music_img"
+        app:layout_constraintTop_toTopOf="@id/riv_music_img"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintHorizontal_bias="0.0"
+        tools:text="Thunder" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_singer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="#b3000000"
+        app:autoSizeMaxTextSize="13sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@id/riv_music_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/tv_music_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_music_name"
+        tools:text="Imagine Dragons" />
+
+</android.support.constraint.ConstraintLayout>

@@ -13,6 +13,7 @@ import com.jayboat.ego.utils.NetUtils;
 import com.jayboat.ego.utils.SQLHelper;
 import com.jayboat.ego.utils.ToastUtils;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
@@ -33,14 +34,19 @@ public class App extends Application {
 
     private static Context appContext;
     private static SQLiteDatabase database;
-
     private static HttpProxyCacheServer proxy;
 
-    private static User user;
-    private static SharedPreferences preferences;
-    private static String phone;
-    private static String pwd;
-    public static boolean isLoginSuccessful = false;
+    public static Context getAppContext() {
+        return appContext;
+    }
+
+    public static HttpProxyCacheServer getProxy() {
+        return proxy == null ? (proxy = new HttpProxyCacheServer(appContext)) : proxy;
+    }
+
+    public static SQLiteDatabase getDatabase() {
+        return database;
+    }
 
     @Override
     public void onCreate() {
@@ -48,9 +54,10 @@ public class App extends Application {
 
         appContext = getApplicationContext();
 
-        preferences = getSharedPreferences("login", MODE_PRIVATE);
-
         database = new SQLHelper().getWritableDatabase();
+
+        /*
+        preferences = getSharedPreferences("login", MODE_PRIVATE);
 
         readData();
 
@@ -58,6 +65,12 @@ public class App extends Application {
             autoLoginByPhone();
         }
     }
+
+    private static User user;
+    private static SharedPreferences preferences;
+    private static String phone;
+    private static String pwd;
+    public static boolean isLoginSuccessful = false;
 
     private void readData() {
         phone = preferences.getString("lastPhone", null);
@@ -112,10 +125,6 @@ public class App extends Application {
         });
     }
 
-    public static Context getAppContext() {
-        return appContext;
-    }
-
     public static void loginSuccessful(@Nullable User user) {
         isLoginSuccessful = true;
         App.user = user;
@@ -158,14 +167,7 @@ public class App extends Application {
     }
 
     public static User getUser() {
-        return user;
+        return user;*/
     }
 
-    public static HttpProxyCacheServer getProxy() {
-        return proxy == null ? (proxy = new HttpProxyCacheServer(appContext)) : proxy;
-    }
-
-    public static SQLiteDatabase getDatabase() {
-        return database;
-    }
 }

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -16,12 +17,15 @@ import com.bumptech.glide.request.transition.Transition
 import com.jayboat.ego.R
 import com.jayboat.ego.bean.Lyric
 import com.jayboat.ego.bean.SongList
+import com.jayboat.ego.net.Mood
 import com.jayboat.ego.ui.widget.STATE_PLAYING
-import com.jayboat.ego.utils.*
+import com.jayboat.ego.utils.NetUtils
+import com.jayboat.ego.utils.ToastUtils
+import com.jayboat.ego.utils.startMusicDetailActivity
+import com.jayboat.ego.utils.startStarListActivity
 import invisible
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.include_buttons.*
-import kotlinx.android.synthetic.main.include_disc.*
 import kotlinx.android.synthetic.main.include_disc.view.*
 import kotlinx.android.synthetic.main.include_lyrics.view.*
 import kotlinx.android.synthetic.main.include_toolbar.*
@@ -46,7 +50,7 @@ class MainActivity : BaseActivity() {
     private val animator by lazy {
         ObjectAnimator.ofFloat(fl_container, "alpha", 1f, 0f, 1f)
                 .apply {
-                    duration = 2500
+                    duration = 2000
                     interpolator = LinearInterpolator()
                 }
     }
@@ -70,7 +74,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() {
-        tb_common.apply {
+        findViewById<Toolbar>(R.id.tb_common).apply {
             setNavigationIcon(R.drawable.ic_setting)
             setNavigationOnClickListener {
                 if (!dl_main.isDrawerOpen(nv_setting)) {
@@ -88,7 +92,7 @@ class MainActivity : BaseActivity() {
 
         ibtn_more.setOnClickListener {
             currentList ?: return@setOnClickListener
-            startMusicDetailActivity(this@MainActivity, currentList!!.result, currentPosition)
+            startMusicDetailActivity(this@MainActivity, Mood.valueOf(moods[0].toUpperCase()).ordinal)
         }
 
         iv_current.setOnClickListener { changeMood() }
@@ -103,7 +107,7 @@ class MainActivity : BaseActivity() {
                 }
                 resources.getString(R.string.comments_plaza) -> {
                 }
-                resources.getString(R.string.my_collection) -> Unit
+                resources.getString(R.string.my_collection) -> startStarListActivity(this@MainActivity, Mood.valueOf(moods[0].toUpperCase()).ordinal)
             }
             true
         }
@@ -114,15 +118,16 @@ class MainActivity : BaseActivity() {
 //      如果没有播放默认是最开始的
 //      不过突然开始纠结这里的逻辑，例如这个Activity是否会被finish掉，就先没写了（理直气壮
         if (currentList == null) {
-            currentList = happyMusicList
+            currentList = Mood.HAPPY.songList
         }
     }
 
     private fun initPosition() {
-        currentPosition = (Math.random() * currentList!!.result.trackCount).toInt()
-        musicControlBinder?.setMusicList(currentList!!)
-        val currentMusic = currentList!!.result.tracks[currentPosition]
-        initMusicData(currentMusic)
+        currentList?.let {
+            currentPosition = (Math.random() * (it.result?.trackCount ?: 0)).toInt()
+            musicControlBinder?.setMusicList(it)
+            initMusicData(it.result.tracks[currentPosition])
+        }
     }
 
     //  emmm..还没想好这个怎么本地怎么操作，drawable的sp好麻烦啊（
@@ -202,10 +207,10 @@ class MainActivity : BaseActivity() {
         }
         iv_current.setImageDrawable(ContextCompat.getDrawable(this, moodsRes[0]))
         currentList = when (moods[0]) {
-            "happy" -> happyMusicList
-            "unhappy" -> unhappyMusicList
-            "clam" -> clamMusicList
-            else -> excitingMusicList
+            "happy" -> Mood.HAPPY.songList
+            "unhappy" -> Mood.UNHAPPY.songList
+            "clam" -> Mood.CLAM.songList
+            else -> Mood.EXCITING.songList
         }
         changeMood()
         initMusicList()
@@ -300,7 +305,7 @@ class MainActivity : BaseActivity() {
     override fun onMusicStart() = Unit
 
     override fun onMusicPause() {
-        dim_playing.currentState = STATE_PLAYING
+        discView.dim_playing.currentState = STATE_PLAYING
         discView.dim_playing.playDisk()
     }
 
@@ -308,9 +313,9 @@ class MainActivity : BaseActivity() {
         discView.dim_playing.stopDisk()
     }
 
-    override fun onProgressUpdate(progress: Float) {
-        lyricView.lrc_main.updateTime((musicControlBinder?.getDuration()!! * progress).toLong())
-        if (progress > 0.995) {
+    override fun onProgressUpdate(progress: Int) {
+        lyricView.lrc_main.updateTime(progress.toLong())
+        if (progress.toDouble() > 0.995 * (musicControlBinder?.getDuration() ?: 1)) {
             toNextMusic()
         }
     }

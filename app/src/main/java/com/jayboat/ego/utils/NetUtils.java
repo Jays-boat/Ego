@@ -18,22 +18,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetUtils {
     private static Retrofit.Builder builder;
 
-    public static void loginByPhone(String phone, String pwd, Callback<User> loginPhoneCallback) {
-        NetConfig.LoginService service = getRetrofitBuilder().build().create(NetConfig.LoginService.class);
-        Call<User> call = service.loginByPhone(phone, pwd);
-        call.enqueue(loginPhoneCallback);
-    }
+//    public static void loginByPhone(String phone, String pwd, Callback<User> loginPhoneCallback) {
+//        NetConfig.LoginService service = getRetrofitBuilder().build().create(NetConfig.LoginService.class);
+//        Call<User> call = service.loginByPhone(phone, pwd);
+//        call.enqueue(loginPhoneCallback);
+//    }
 
     public static void getLyric(long id, Callback<Lyric> getLyricCallBack) {
         NetConfig.GetMusicData getMusicData = getRetrofitBuilder().build().create(NetConfig.GetMusicData.class);
         Call<Lyric> call = getMusicData.getLyric(String.valueOf(id));
         call.enqueue(getLyricCallBack);
-    }
-
-    public static void getMusicList(long id, Callback<SongList> songCallback) {
-        NetConfig.GetMusicData getMusicData = getRetrofitBuilder().build().create(NetConfig.GetMusicData.class);
-        Call<SongList> call = getMusicData.getSongList(String.valueOf(id));
-        call.enqueue(songCallback);
     }
 
     private static Retrofit.Builder getRetrofitBuilder() {

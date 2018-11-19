@@ -5,6 +5,10 @@ import android.widget.Toast;
 
 import com.jayboat.ego.App;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 
 /**
  * Created by Hosigus on 2018/5/5.
@@ -40,7 +44,7 @@ public class ToastUtils {
      * @param text text
      */
     public static void asyncShow(final String text) {
-        ThreadUtils.getInstance().post(new Runnable() {
+        AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 show(text);
@@ -52,12 +56,12 @@ public class ToastUtils {
      * @param text text
      */
     public static void asyncShow(final String text, final int time) {
-        ThreadUtils.getInstance().post(new Runnable() {
+        AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                show(text,time);
+                show(text);
             }
-        });
+        }, time, TimeUnit.MILLISECONDS);
     }
 
 }
