@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="@id/riv_music_img"
         app:layout_constraintEnd_toEndOf="@id/riv_music_img"
         app:layout_constraintBottom_toBottomOf="@id/riv_music_img"
-        tools:ignore= "contentDescription" />
+        tools:ignore="contentDescription" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_music_name"

@@ -4,21 +4,28 @@ import android.content.ContentValues
 import com.jayboat.ego.App
 import com.jayboat.ego.bean.SQLMusicBean
 import com.jayboat.ego.bean.SongList
+import com.jayboat.ego.net.Mood
+import java.util.*
 
-fun makeSqlMusicBean(music: SongList.ResultBean.TracksBean) =
-        SQLMusicBean(music.id, music.name,music.album.picUrl,StringBuilder().let { sb ->
+fun makeSqlMusicBean(music: SongList.ResultBean.TracksBean, category: String = "默认收藏", mood: Mood = Mood.HAPPY) =
+        SQLMusicBean(music.id, music.name, music.album.picUrl, StringBuilder().let { sb ->
             music.artists.forEach { artist ->
                 sb.append(artist.name).append("/")
             }
             sb.substring(0, sb.length - 1)
-        }.toString())
+        }.toString(), Date(), category, mood)
 
 fun saveLike(bean: SQLMusicBean, like: Boolean = true) {
     updateMusicState(bean, ContentValues().apply { put("like", 1.takeIf { like } ?: 0) })
 }
 
 fun saveStar(bean: SQLMusicBean, star: Boolean = true) {
-    updateMusicState(bean, ContentValues().apply { put("star", 1.takeIf { star } ?: 0) })
+    updateMusicState(bean, ContentValues().apply {
+        put("star", 1.takeIf { star } ?: 0)
+        put("star_date", bean.starDate.time)
+        put("category", bean.category)
+        put("mood", bean.mood.name)
+    })
 }
 
 private fun updateMusicState(bean: SQLMusicBean, values: ContentValues) {
@@ -57,14 +64,17 @@ fun selectStars() = selectFromMusicStatus("star", arrayOf("1"))
 private fun selectFromMusicStatus(name: String, value: Array<String>): List<SQLMusicBean> {
     val resList = mutableListOf<SQLMusicBean>()
     val cursor = App.getDatabase().rawQuery(
-            "SELECT id,name,img_url,artists FROM music_state WHERE $name = ?", value)
+            "SELECT * FROM music_state WHERE $name = ?", value)
     if (cursor.moveToFirst()) {
         do {
             resList.add(SQLMusicBean(
                     cursor.getLong(cursor.getColumnIndex("id")),
                     cursor.getString(cursor.getColumnIndex("name")),
                     cursor.getString(cursor.getColumnIndex("img_url")),
-                    cursor.getString(cursor.getColumnIndex("artists"))
+                    cursor.getString(cursor.getColumnIndex("artists")),
+                    Date(cursor.getLong(cursor.getColumnIndex("star_date"))),
+                    cursor.getString(cursor.getColumnIndex("category")),
+                    Mood.valueOf(cursor.getString(cursor.getColumnIndex("mood")))
             ))
         } while (cursor.moveToNext())
     }

@@ -25,7 +25,10 @@ class SQLHelper : SQLiteOpenHelper(App.getAppContext(), NAME, null, VERSION) {
                         "img_url TEXT DEFAULT ''," +
                         "artists VARCHAR(100) DEFAULT ''," +
                         "like INTEGER DEFAULT 0," +
-                        "star INTEGER DEFAULT 0" +
+                        "star INTEGER DEFAULT 0," +
+                        "star_date INTEGER DEFAULT 0," +
+                        "category TEXT DEFAULT ''," +
+                        "mood VARCHAR(20) DEFAULT 'HAPPY'" +
                         ")"
 
         private const val CREATE_TABLE_MUSIC_COMMEND =

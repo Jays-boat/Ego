@@ -16,6 +16,7 @@ import com.r0adkll.slidr.Slidr
 @SuppressLint("Registered")
 abstract class BaseActivity : AppCompatActivity(), MusicPlayerService.MusicPlayerListener {
     protected var musicControlBinder: MusicPlayerService.MusicControlBinder? = null
+    protected open val needSlide: Boolean = true
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -32,7 +33,9 @@ abstract class BaseActivity : AppCompatActivity(), MusicPlayerService.MusicPlaye
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Slidr.attach(this)
+        if (needSlide) {
+            Slidr.attach(this)
+        }
     }
 
     override fun onStart() {

@@ -13,7 +13,6 @@ import com.jayboat.ego.net.Mood
 import com.jayboat.ego.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-
 import kotlinx.android.synthetic.main.activity_music_detail.*
 import kotlinx.android.synthetic.main.include_backbar.*
 import safeSubscribeBy
@@ -55,7 +54,7 @@ class MusicDetailActivity : BaseActivity() {
         iv_move_forward.setOnClickListener {
             musicControlBinder?.playMusic(if (curPos + 1 == getMusicList()?.trackCount) 0 else curPos + 1)
         }
-        iv_like.setOnClickListener {_ ->
+        iv_like.setOnClickListener { _ ->
             getMusicList()?.tracks?.get(curPos)?.let {
                 if (isLikeMusic(it.id)) {
                     saveLike(makeSqlMusicBean(it), false)
@@ -66,19 +65,21 @@ class MusicDetailActivity : BaseActivity() {
                 }
             }
         }
-        iv_star.setOnClickListener {_ ->
+        iv_star.setOnClickListener { _ ->
             getMusicList()?.tracks?.get(curPos)?.let {
                 if (isStarMusic(it.id)) {
                     saveStar(makeSqlMusicBean(it), false)
                     iv_star.setImageResource(R.drawable.ic_star_off)
                 } else {
-                    saveStar(makeSqlMusicBean(it), true)
-                    iv_star.setImageResource(R.drawable.ic_star_on)
+                    siv_detail.show(mood) { str ->
+                        iv_star.setImageResource(R.drawable.ic_star_on)
+                        saveStar(makeSqlMusicBean(it, str, mood), true)
+                    }
                 }
             }
         }
 
-        bar_music.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
+        bar_music.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     musicControlBinder?.seekTo(progress)

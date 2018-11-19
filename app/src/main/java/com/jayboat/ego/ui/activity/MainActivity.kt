@@ -43,6 +43,8 @@ class MainActivity : BaseActivity() {
     private var isExpand = false
     private var currentPosition = 0
     private var currentList: SongList? = null
+    override val needSlide: Boolean
+        get() = false
     //    index为0表示当前状态和对应的drawableId
     //    根据目前的进行更改……
     private val moods = mutableListOf("happy", "unhappy", "clam", "exciting")
