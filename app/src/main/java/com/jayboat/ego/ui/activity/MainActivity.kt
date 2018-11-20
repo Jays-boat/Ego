@@ -5,9 +5,9 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -20,15 +20,15 @@ import com.jayboat.ego.R
 import com.jayboat.ego.bean.Lyric
 import com.jayboat.ego.bean.SongList
 import com.jayboat.ego.net.Mood
+import com.jayboat.ego.ui.widget.MoodButtons
 import com.jayboat.ego.ui.widget.STATE_PLAYING
+import com.jayboat.ego.ui.widget.moods
 import com.jayboat.ego.utils.NetUtils
 import com.jayboat.ego.utils.ToastUtils
 import com.jayboat.ego.utils.startMusicDetailActivity
 import com.jayboat.ego.utils.startStarListActivity
 import gone
-import invisible
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.include_buttons.*
 import kotlinx.android.synthetic.main.include_card.view.*
 import kotlinx.android.synthetic.main.include_disc.view.*
 import kotlinx.android.synthetic.main.include_lyrics.view.*
@@ -36,15 +36,14 @@ import kotlinx.android.synthetic.main.include_toolbar.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import screenHeight
 import screenWidth
-import visible
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), MoodButtons.OnCurrentMoodListener{
 
     private var x1 = 0f
     private var x2 = 0f
     private var isPicture = true
-    private var isExpand = false
     private var isCommendShow = false
     private var isDialogShow = false
     private var showTime = 0.0
@@ -55,8 +54,6 @@ class MainActivity : BaseActivity() {
         get() = false
     //    index为0表示当前状态和对应的drawableId
     //    根据目前的进行更改……
-    private val moods = mutableListOf("happy", "unhappy", "clam", "exciting")
-    private val moodsRes = mutableListOf(R.drawable.ic_smile, R.drawable.ic_unhappy, R.drawable.ic_clam, R.drawable.ic_exciting)
     private val animator by lazy {
         ObjectAnimator.ofFloat(fl_container, "alpha", 1f, 0f, 1f)
                 .apply {
@@ -106,7 +103,12 @@ class MainActivity : BaseActivity() {
             startMusicDetailActivity(this@MainActivity, Mood.valueOf(moods[0].toUpperCase()).ordinal)
         }
 
-        iv_current.setOnClickListener { changeMood() }
+        btn_moods.apply {
+            addListener(this@MainActivity)
+            setOnClickListener {
+                Log.i(TAG,"Touched")
+            }
+        }
 
 //      todo：前往不同的页面
         nv_setting.setNavigationItemSelectedListener {
@@ -180,45 +182,13 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun changeMood() {
-        if (isExpand) {
-            iv_bg.invisible()
-            iv_bottom.invisible()
-            iv_center.invisible()
-            iv_top.invisible()
-            isExpand = false
-        } else {
-            iv_bg.visible()
-            iv_bottom.visible()
-            iv_center.visible()
-            iv_top.visible()
-            isExpand = true
-            iv_bottom.setOnClickListener { changeData(1) }
-            iv_center.setOnClickListener { changeData(2) }
-            iv_top.setOnClickListener { changeData(3) }
-        }
-    }
-
-    private fun changeData(index: Int) {
-        val temp = moods[index]
-        moods[index] = moods[0]
-        moods[0] = temp
-        val tempRes = moodsRes[index]
-        moodsRes[index] = moodsRes[0]
-        moodsRes[0] = tempRes
-        when (index) {
-            1 -> iv_bottom.setImageDrawable(ContextCompat.getDrawable(this, moodsRes[1]))
-            2 -> iv_center.setImageDrawable(ContextCompat.getDrawable(this, moodsRes[2]))
-            3 -> iv_top.setImageDrawable(ContextCompat.getDrawable(this, moodsRes[3]))
-        }
-        iv_current.setImageDrawable(ContextCompat.getDrawable(this, moodsRes[0]))
-        currentList = when (moods[0]) {
+    override fun currentMood(mood: String) {
+        currentList = when (mood) {
             "happy" -> Mood.HAPPY.songList
             "unhappy" -> Mood.UNHAPPY.songList
             "clam" -> Mood.CLAM.songList
             else -> Mood.EXCITING.songList
         }
-        changeMood()
         initMusicList()
         initPosition()
     }
@@ -309,18 +279,18 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onMusicStart() {
+        Log.i(TAG,"mood:${moods[0]}")
         isCommendShow = (Math.random() + 0.5).toInt() == 1
         if (isCommendShow) {
             showTime = Math.random() * 0.01 + 0.03
         }
-        if (unhappyTimes > 3 && Mood.valueOf(moods[0].toUpperCase()) == Mood.UNHAPPY && !isDialogShow) {
+        if (unhappyTimes > 2 && Mood.valueOf(moods[0].toUpperCase()) == Mood.UNHAPPY && !isDialogShow) {
             val view = View.inflate(this, R.layout.include_card, null).apply {
                 tv_card_text.text = "还是很沮丧吗？来点开心的吧！"
                 btn_card_sure.setOnClickListener {
                     repeat(4) { i ->
                         if (moods[i] == "happy") {
-                            changeData(i)
-                            changeMood()
+                            btn_moods.changeToHappy()
                             this@MainActivity.dl_main.removeView(this)
                         }
                     }
@@ -330,7 +300,10 @@ class MainActivity : BaseActivity() {
                 }
             }
             val param = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                setMargins(45, 440, 45, 150)
+                setMargins((45/375.0 * screenWidth).toInt(),
+                        (440/667.0 * screenHeight).toInt(),
+                        (45/375.0 * screenWidth).toInt(),
+                        (100/667.0 * screenHeight).toInt())
             }
             this@MainActivity.dl_main.addView(view, param)
             isDialogShow = true
@@ -375,14 +348,23 @@ class MainActivity : BaseActivity() {
                 }
             }
             val param = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                setMargins(45, 45, 45, 620)
+                setMargins((45/375.0 * screenWidth).toInt(),
+                        (37/667.0 * screenHeight).toInt(),
+                        (45/375.0 * screenWidth).toInt(),
+                        (557/667.0 * screenHeight).toInt())
             }
             this@MainActivity.dl_main.addView(view, param)
             isCommendShow = false
         }
     }
 
-    override fun onMusicSelect(pos: Int) = Unit
+    override fun onMusicSelect(pos: Int) {
+        if (currentPosition == pos) return
+        currentPosition = pos
+        currentList?.let {
+            initMusicData(it.result.tracks[currentPosition])
+        }
+    }
 
     override fun onMusicListChange() = Unit
 }

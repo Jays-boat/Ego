@@ -1,50 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
+    <android.support.constraint.Group
+        android:id="@+id/group_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="iv_bg,iv_top,iv_center,iv_bottom" />
 
     <ImageView
         android:id="@+id/iv_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:src="@drawable/bg_frame" />
+        android:src="@drawable/bg_frame"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/iv_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/iv_center"
-        android:layout_marginBottom="10dp"
         android:alpha="0.5"
-        android:visibility="invisible"
-        android:src="@drawable/ic_exciting" />
+        android:src="@drawable/ic_exciting"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/iv_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/iv_bottom"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:alpha="0.5"
-        android:visibility="invisible"
-        android:src="@drawable/ic_clam" />
+        android:src="@drawable/ic_clam"
+        app:layout_constraintBottom_toTopOf="@+id/iv_bottom"
+        app:layout_constraintTop_toBottomOf="@+id/iv_top"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/iv_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/iv_current"
-        android:layout_marginBottom="20dp"
         android:alpha="0.5"
-        android:visibility="invisible"
-        android:src="@drawable/ic_unhappy" />
+        android:src="@drawable/ic_unhappy"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/iv_current"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/iv_bg"
-        android:src="@drawable/ic_smile" />
+        android:src="@drawable/ic_smile"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_bg"
+        tools:ignore="ContentDescription" />
 
-</RelativeLayout>
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.74" />
+
+</android.support.constraint.ConstraintLayout>
